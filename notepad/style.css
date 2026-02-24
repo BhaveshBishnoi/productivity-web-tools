@@ -1,0 +1,408 @@
+/* Google Fonts - Extended */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+    /* Light Theme (Daylight) */
+    --bg-color: #f3f4f6;
+    --text-color: #1e293b;
+    --text-muted: #64748b;
+    --paper-bg: #ffffff;
+    --dock-bg: rgba(255, 255, 255, 0.85);
+    --border-color: #e2e8f0;
+    --accent-color: #3b82f6;
+    --accent-hover: #2563eb;
+    --dock-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    --editor-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --selection-bg: #bfdbfe;
+
+    /* Animation */
+    --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+[data-theme="dark"] {
+    /* Dark Theme (Midnight) */
+    --bg-color: #0c0c0e;
+    /* Deep midnight */
+    --text-color: #e2e8f0;
+    --text-muted: #94a3b8;
+    --paper-bg: #151518;
+    /* Slightly lighter than bg */
+    --dock-bg: rgba(26, 26, 30, 0.85);
+    --border-color: #2a2a30;
+    --accent-color: #818cf8;
+    --accent-hover: #a5b4fc;
+    --dock-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    /* Glow effect */
+    --editor-shadow: none;
+    --selection-bg: #312e81;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    outline: none;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    background-image: radial-gradient(circle at 50% 0%, rgba(var(--accent-color), 0.03) 0%, transparent 50%);
+}
+
+/* --- Floating Nav Dock --- */
+.nav-dock {
+    position: fixed;
+    top: 24px;
+    height: 56px;
+    padding: 0 16px;
+    background: var(--dock-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 999px;
+    /* Pill shape */
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow: var(--dock-shadow);
+    z-index: 1000;
+    transition: all 0.3s var(--ease-out-quart);
+    max-width: 95vw;
+}
+
+/* Hide dock when in focus mode */
+body.focus-mode .nav-dock {
+    transform: translateY(-100px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Show on hover in focus mode */
+body.focus-mode .nav-dock-trigger:hover+.nav-dock,
+body.focus-mode .nav-dock:hover {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Invisible trigger area at top for focus mode */
+.nav-dock-trigger {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    z-index: 1001;
+    display: none;
+}
+
+body.focus-mode .nav-dock-trigger {
+    display: block;
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-center {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-color);
+    padding-right: 12px;
+    border-right: 1px solid var(--border-color);
+}
+
+.logo svg {
+    stroke: var(--accent-color);
+}
+
+/* Icons & Buttons */
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.icon-btn:hover {
+    background: rgba(125, 125, 125, 0.1);
+    color: var(--text-color);
+}
+
+.icon-btn.active {
+    background: rgba(var(--accent-color), 0.1);
+    color: var(--accent-color);
+}
+
+.icon-btn:active {
+    transform: scale(0.95);
+}
+
+.divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border-color);
+    margin: 0 8px;
+}
+
+/* Custom Selects */
+.select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* ... (keep existing select styles) ... */
+.select-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 4px;
+    background-color: var(--text-muted);
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+select {
+    appearance: none;
+    background: rgba(125, 125, 125, 0.05);
+    border: 1px solid transparent;
+    color: var(--text-color);
+    padding: 6px 24px 6px 12px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+select:hover {
+    background: rgba(125, 125, 125, 0.1);
+}
+
+select:focus {
+    border-color: var(--accent-color);
+    background: var(--paper-bg);
+}
+
+.select-wrapper.small select {
+    padding-right: 20px;
+    width: 65px;
+}
+
+/* Theme Toggle Animation */
+.theme-btn svg {
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.theme-btn:hover svg {
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* --- Main Editor Area --- */
+main {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    /* Default center, changes in full-width */
+    padding-top: 100px;
+    padding-bottom: 0px;
+    /* Remove padding as editor fills it */
+    padding-left: 0;
+    padding-right: 0;
+    overflow-y: auto;
+    position: relative;
+}
+
+.editor-wrapper {
+    width: 100%;
+    max-width: 100%;
+    /* Default Full Width */
+    height: auto;
+    min-height: calc(100vh - 100px);
+    background: var(--paper-bg);
+    border-radius: 0;
+    box-shadow: none;
+    padding: 60px 40px;
+    position: relative;
+    transition: background-color 0.4s ease, max-width 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease, border-radius 0.4s ease;
+}
+
+/* Narrow Mode Modifier */
+body.narrow-mode .editor-wrapper {
+    max-width: 850px;
+    border-radius: 1px;
+    box-shadow: var(--editor-shadow);
+    padding: 60px 80px;
+}
+
+/* Responsive adjustment */
+@media (min-width: 1600px) {
+    .editor-wrapper {
+        padding: 60px 100px;
+    }
+
+    body.narrow-mode .editor-wrapper {
+        padding: 60px 80px;
+    }
+}
+
+/* Zen mode adjustment */
+@media (min-width: 1200px) {
+    body.narrow-mode .editor-wrapper {
+        border-radius: 4px;
+        margin-bottom: 2rem;
+        min-height: auto;
+        flex: 1;
+        /* Grow to fill if needed */
+        height: 100%;
+    }
+}
+
+#editor {
+    width: 100%;
+    height: 100%;
+    min-height: 60vh;
+    border: none;
+    resize: none;
+    background: transparent;
+    color: var(--text-color);
+    line-height: 1.8;
+    font-variant-ligatures: common-ligatures;
+    tab-size: 4;
+    transition: color 0.3s;
+}
+
+#editor::placeholder {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+#editor::selection {
+    background: var(--selection-bg);
+}
+
+/* --- Status Dock --- */
+.status-dock {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--dock-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--dock-shadow);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    transform: translateY(0);
+    transition: transform 0.3s ease, opacity 0.3s;
+    z-index: 900;
+}
+
+/* Hide status dock in focus mode unless hovered area? Or just keep it. */
+/* Let's keep status dock visible but maybe less intrusive */
+
+.status-dock.hidden {
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.dock-divider {
+    width: 1px;
+    height: 12px;
+    background: var(--border-color);
+}
+
+.status-item {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Responsive Handling */
+@media (max-width: 768px) {
+
+    /* ... (keep existing mobile styles) ... */
+    .nav-dock {
+        top: 10px;
+        height: auto;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 95vw;
+        padding: 12px;
+        gap: 12px;
+        border-radius: 24px;
+    }
+
+    .nav-left,
+    .nav-right {
+        order: 1;
+    }
+
+    .nav-center {
+        order: 2;
+        width: 100%;
+        justify-content: space-between;
+        border-top: 1px solid var(--border-color);
+        padding-top: 8px;
+    }
+
+    .logo {
+        border-right: none;
+    }
+
+    main {
+        padding: 140px 0 0 0;
+    }
+
+    .editor-wrapper {
+        padding: 30px 20px;
+        min-height: 60vh;
+    }
+
+    .status-dock {
+        bottom: 10px;
+        right: 50%;
+        transform: translateX(50%);
+        width: auto;
+        white-space: nowrap;
+    }
+}
